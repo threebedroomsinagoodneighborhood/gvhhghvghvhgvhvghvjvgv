@@ -2,7 +2,8 @@
 #include <string>
 #include <iomanip>
 #include <fstream>
-
+#include <windows.h>
+#include <locale.h>
 using namespace std;
 
 class Prey;
@@ -14,34 +15,34 @@ private:
     friend class Prey;
     friend Predator;
     friend class Arena;
-    friend ostream& operator<<(ostream&, const Arena&);
-    friend bool check(const Prey& prey, const Predator& predator);
-    friend bool check1(const Prey& prey, const Predator& predator);
+    friend ostream & operator<<(ostream &,const Arena &);
+    friend bool check(const Prey & prey,const Predator & predator);
+    friend bool check1(const Prey & prey,const Predator & predator);
     int x;
     int y;
 public:
 
-    // ÐšÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
-    Point2D(int x = 0, int y = 0) : x(x), y(y) {  }
+    // Êîíñòðóêòîð
+    Point2D(int x = 0,int y = 0): x(x),y(y) {  }
 
-    // ÐŸÐµÑ€ÐµÐ³Ñ€ÑƒÐ·ÐºÐ° Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð° Ð²Ñ‹Ð²Ð¾Ð´Ð°
-    friend std::ostream& operator<<(std::ostream& out, const Point2D& point) {
+    // Ïåðåãðóçêà îïåðàòîðà âûâîäà
+    friend std::ostream & operator<<(std::ostream & out,const Point2D & point) {
         out << "(" << point.x << ", " << point.y << ")";
         return out;
     }
 
-    void setPoint(int x, int y) {
+    void setPoint(int x,int y) {
         this->x = x;
         this->y = y;
     }
-    bool operator==(const Point2D& point) {
+    bool operator==(const Point2D & point) {
         if (x == point.x && y == point.y) return 1;
         else return 0;
     }
 };
 
 class Prey {
-    friend ostream& operator<<(ostream&, const Arena&);
+    friend ostream & operator<<(ostream &,const Arena &);
 private:
     friend Predator;
     friend class Arena;
@@ -49,17 +50,17 @@ private:
     Point2D location;
 
 public:
-    Prey(const std::string& name, const Point2D& location) : name(name), location(location) {   }
+    Prey(const std::string & name,const Point2D & location): name(name),location(location) {   }
 
-    void MoveTo(int x, int y) {
-        location.setPoint(x, y);
+    void MoveTo(int x,int y) {
+        location.setPoint(x,y);
     }
 
-    void AutoMove(const Arena&, int z);
+    void AutoMove(const Arena &,int z);
 
-    friend ostream& operator<<(ostream& out, const Prey&);
-    friend bool check(const Prey& prey, const Predator& predator);
-    friend bool check1(const Prey& prey, const Predator& predator);
+    friend ostream & operator<<(ostream & out,const Prey &);
+    friend bool check(const Prey & prey,const Predator & predator);
+    friend bool check1(const Prey & prey,const Predator & predator);
     int getx() {
         return location.x;
     }
@@ -67,8 +68,8 @@ public:
         return location.y;
     }
 };
-ostream& operator<<(ostream& out, const Prey& p) {
-    out << "Ð˜Ð¼Ñ Ð¶ÐµÑ€Ñ‚Ð²Ñ‹ - " << p.name << "ÐšÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ Ð¶ÐµÑ€Ñ‚Ð²Ñ‹ - " << p.location << endl;
+ostream & operator<<(ostream & out,const Prey & p) {
+    out << "Èìÿ æåðòâû - " << p.name << "Êîîðäèíàòû æåðòâû - " << p.location << endl;
     return out;
 }
 
@@ -76,44 +77,44 @@ class Predator {
 private:
     friend Prey;
     friend class Arena;
-    friend ostream& operator<<(ostream&, const Arena&);
+    friend ostream & operator<<(ostream &,const Arena &);
     std::string name;
     Point2D location;
 
 public:
-    Predator(const std::string& name, const Point2D& location) : name(name), location(location) {   }
+    Predator(const std::string & name,const Point2D & location): name(name),location(location) {   }
 
-    void MoveTo(int x, int y) {
-        location.setPoint(x, y);
+    void MoveTo(int x,int y) {
+        location.setPoint(x,y);
     }
-    void AutoMove(const Arena&, int z);
-    friend ostream& operator<<(ostream&, const Predator&);
-    friend bool check(const Prey& prey, const Predator& predator);
-    friend bool check1(const Prey& prey, const Predator& predator);
+    void AutoMove(const Arena &,int z);
+    friend ostream & operator<<(ostream &,const Predator &);
+    friend bool check(const Prey & prey,const Predator & predator);
+    friend bool check1(const Prey & prey,const Predator & predator);
 };
-ostream& operator<<(ostream& out, const Predator& p) {
-    out << "Ð˜Ð¼Ñ Ñ…Ð¸Ñ‰Ð½Ð¸ÐºÐ° - " << p.name << "\nÐšÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ Ñ…Ð¸Ñ‰Ð½Ð¸ÐºÐ° - " << p.location << endl;
+ostream & operator<<(ostream & out,const Predator & p) {
+    out << "Èìÿ õèùíèêà - " << p.name << "\nÊîîðäèíàòû õèùíèêà - " << p.location << endl;
     return out;
 }
 
 class Arena {
-    int l, w;
-    Prey* prey;
-    Predator* predator;
+    int l,w;
+    Prey * prey;
+    Predator * predator;
 public:
-    Arena(int w, int l, Prey* prey, Predator* predator) {
+    Arena(int w,int l,Prey * prey,Predator * predator) {
         this->l = l;
         this->w = w;
         this->prey = prey;
         this->predator = predator;
     }
-    friend ostream& operator<<(ostream&, const Arena&);
-    friend void Prey::AutoMove(const Arena& a, int z);
-    friend void Predator::AutoMove(const Arena& ar, int z);
+    friend ostream & operator<<(ostream &,const Arena &);
+    friend void Prey::AutoMove(const Arena & a,int z);
+    friend void Predator::AutoMove(const Arena & ar,int z);
 
 };
 
-ostream& operator<<(ostream& out, const Arena& a) {
+ostream & operator<<(ostream & out,const Arena & a) {
     cout << "\033[2J\033[1;1H";
     cout << "   ";
     for (int i = 0; i < a.w; i++) cout << i + 1 << " ";
@@ -128,11 +129,11 @@ ostream& operator<<(ostream& out, const Arena& a) {
                 for (int j = 1; j < a.predator->location.x; j++) {
                     cout << "  ";
                 }
-                cout << "Ð¥ ";
+                cout << "Õ ";
                 for (int j = a.predator->location.x + 1; j < a.prey->location.x; j++) {
                     cout << "  ";
                 }
-                cout << "Ð– ";
+                cout << "Æ ";
                 for (int j = a.prey->location.x + 1; j <= a.w; j++) {
                     cout << "  ";
                 }
@@ -141,29 +142,29 @@ ostream& operator<<(ostream& out, const Arena& a) {
                 for (int j = 1; j < a.prey->location.x; j++) {
                     cout << "  ";
                 }
-                cout << "Ð– ";
+                cout << "Æ ";
                 for (int j = a.prey->location.x + 1; j < a.predator->location.x; j++) {
                     cout << "  ";
                 }
-                cout << "Ð¥ ";
+                cout << "Õ ";
                 for (int j = a.predator->location.x + 1; j <= a.w; j++) {
                     cout << "  ";
                 }
             }
             else if (a.predator->location.x == a.prey->location.x) {
                 for (int j = 1; j < a.predator->location.x; j++) cout << "  ";
-                cout << "Ð¥ ";
+                cout << "Õ ";
                 for (int j = a.predator->location.x; j < a.w; j++) cout << "  ";
             }
         }
         else if (a.prey->location.y == i + 1) {
             for (int j = 1; j < a.prey->location.x; j++) cout << "  ";
-            cout << "Ð– ";
+            cout << "Æ ";
             for (int j = a.prey->location.x; j < a.w; j++) cout << "  ";
         }
         else if (a.predator->location.y == i + 1) {
             for (int j = 1; j < a.predator->location.x; j++) cout << "  ";
-            cout << "Ð¥ ";
+            cout << "Õ ";
             for (int j = a.predator->location.x; j < a.w; j++) cout << "  ";
         }
         else if (a.prey->location.y != i + 1 && a.predator->location.y != i + 1) {
@@ -177,13 +178,13 @@ ostream& operator<<(ostream& out, const Arena& a) {
     return out;
 }
 
-void Prey::AutoMove(const Arena& a, int z) {
+void Prey::AutoMove(const Arena & a,int z) {
     int q;
     if (z == 1) {
         q = rand() % 8;
     }
     else {
-        cout << "ÐšÑƒÐ´Ð° Ð¸Ð´Ñ‚Ð¸?\n0-Ð²Ð²ÐµÑ€Ñ…-Ð²Ð»ÐµÐ²Ð¾ 1-Ð²Ð²ÐµÑ€Ñ… 2-Ð²Ð²ÐµÑ€Ñ…-Ð²Ð¿Ñ€Ð°Ð²Ð¾ 3-Ð²Ð»ÐµÐ²Ð¾ 4-Ð²Ð¿Ñ€Ð°Ð²Ð¾ 5-Ð²Ð½Ð¸Ð·-Ð²Ð»ÐµÐ²Ð¾ 6-Ð²Ð½Ð¸Ð· 7-Ð²Ð½Ð¸Ð·-Ð²Ð¿Ñ€Ð°Ð²Ð¾" << endl;
+        cout << "Êóäà èäòè?\n0-ââåðõ-âëåâî 1-ââåðõ 2-ââåðõ-âïðàâî 3-âëåâî 4-âïðàâî 5-âíèç-âëåâî 6-âíèç 7-âíèç-âïðàâî" << endl;
         cin >> q;
     }
     switch (q) {
@@ -192,59 +193,59 @@ void Prey::AutoMove(const Arena& a, int z) {
             location.x -= 1;
             location.y -= 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 1:
         if (location.y != 1) {
             location.y -= 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 2:
         if (location.x != a.w && location.y != 1) {
             location.x += 1;
             location.y -= 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 3:
         if (location.x != 1) {
             location.x -= 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 4:
         if (location.x != a.w) {
             location.x += 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 5:
         if (location.x != 1 && location.y != a.l) {
             location.x -= 1;
             location.y += 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 6:
         if (location.y != a.l) {
             location.y += 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 7:
         if (location.x != a.w && location.y != a.l) {
             location.x += 1;
             location.y += 1;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     default:
         break;
     }
 }
 
-void Predator::AutoMove(const Arena& ar, int z) {
+void Predator::AutoMove(const Arena & ar,int z) {
     int q;
     int a;
     if (z == 0) {
@@ -253,11 +254,11 @@ void Predator::AutoMove(const Arena& ar, int z) {
     }
     else {
         int s = 0;
-        cout << "ÐšÑƒÐ´Ð° Ð¸Ð´Ñ‚Ð¸?\n0-Ð²Ð²ÐµÑ€Ñ… 1-Ð²Ð¿Ñ€Ð°Ð²Ð¾ 2-Ð²Ð½Ð¸Ð· 3-Ð²Ð»ÐµÐ²Ð¾" << endl;
+        cout << "Êóäà èäòè?\n0-ââåðõ 1-âïðàâî 2-âíèç 3-âëåâî" << endl;
         cin >> q;
 
         do {
-            cout << "ÐÐ° ÑÐºÐ¾Ð»ÑŒÐºÐ¾? (1-5)" << endl;
+            cout << "Íà ñêîëüêî? (1-5)" << endl;
             cin >> a;
             if (1 <= a && a <= 5) s = 1;
         } while (s != 1);
@@ -268,30 +269,30 @@ void Predator::AutoMove(const Arena& ar, int z) {
         if (location.y >= (a)) {
             location.y -= a;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 1:
         if (location.x <= (ar.w - a)) {
             location.x += a;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 2:
         if (location.y <= (ar.l - a)) {
             location.y += a;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     case 3:
         if (location.x >= (a)) {
             location.x -= a;
         }
-        else cout << "Ð’Ñ‹Ñ…Ð¾Ð´ Ð·Ð° Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‹" << endl;
+        else cout << "Âûõîä çà ïðåäåëû" << endl;
         break;
     }
 }
 
-bool check(const Prey& prey, const Predator& predator) {
+bool check(const Prey & prey,const Predator & predator) {
     if (prey.location.x == predator.location.x && abs(prey.location.y - predator.location.y) <= 5) {
         return 1;
     }
@@ -300,47 +301,51 @@ bool check(const Prey& prey, const Predator& predator) {
     }
     else return 0;
 }
-bool check1(const Prey& prey, const Predator& predator) {
+bool check1(const Prey & prey,const Predator & predator) {
     if ((prey.location.x == predator.location.x) && (prey.location.y == predator.location.y)) return 1;
     else return 0;
 }
 int main() {
+    //SetConsoleCP(1251);
+    //SetConsoleOutputCP(1251);
+    //setlocale(LC_ALL,"Eng");
+    setlocale(LC_ALL,"Rus");
     int z;
     cout << "Enter a name for your prey: ";
-    string name, name1;
+    string name,name1;
     cin >> name;
     cout << "Enter a name for your predator: ";
     cin >> name1;
-    Prey prey(name, Point2D(1, 1));
-    Predator predator(name1, Point2D(7, 1));
-    cout << "Ð—Ð° ÐºÐ¾Ð³Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ Ð¸Ð³Ñ€Ð°Ñ‚ÑŒ? (0-Ð¶ÐµÑ€Ñ‚Ð²Ð°, 1-Ñ…Ð¸Ñ‰Ð½Ð¸Ðº)" << endl;
+    Prey prey(name,Point2D(1,1));
+    Predator predator(name1,Point2D(7,1));
+    cout << "Çà êîãî õîòèòå èãðàòü? (0-æåðòâà, 1-õèùíèê)" << endl;
     cin >> z;
 
-    Arena arena(10, 10, &prey, &predator);
+    Arena arena(10,10,&prey,&predator);
     cout << arena << endl;
 
     while (1) {
         if (z == 0) {
-            if (check(prey, predator)) {
-                predator.MoveTo(prey.getx(), prey.gety());
+            if (check(prey,predator)) {
+                predator.MoveTo(prey.getx(),prey.gety());
                 cout << arena;
-                cout << "\n!!!!!! Ð¥Ð˜Ð©ÐÐ˜Ðš ÐŸÐžÐ‘Ð•Ð”Ð˜Ð› !!!!!!" << endl;
+                cout << "\n!!!!!! ÕÈÙÍÈÊ ÏÎÁÅÄÈË !!!!!!" << endl;
                 return 0;
             }
             else {
-                prey.AutoMove(arena, z);
-                predator.AutoMove(arena, z);
+                prey.AutoMove(arena,z);
+                predator.AutoMove(arena,z);
                 cout << arena << endl;
             }
         }
         else {
-            if (check1(prey, predator)) {
-                cout << "\n!!!!!! Ð¥Ð˜Ð©ÐÐ˜Ðš ÐŸÐžÐ‘Ð•Ð”Ð˜Ð› !!!!!!" << endl;
+            if (check1(prey,predator)) {
+                cout << "\n!!!!!! ÕÈÙÍÈÊ ÏÎÁÅÄÈË !!!!!!" << endl;
                 return 0;
             }
             else {
-                prey.AutoMove(arena, z);
-                predator.AutoMove(arena, z);
+                prey.AutoMove(arena,z);
+                predator.AutoMove(arena,z);
                 cout << arena << endl;
             }
         }
