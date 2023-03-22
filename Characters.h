@@ -143,11 +143,13 @@ public:
     }
 
     int askDirection() {
-        int direction(0);
-        cout << "Куда идти?" << endl;
-        cout << "0 - вверх, 1 - вправо, 2 - вниз, 3 - влево," << endl;
-        cin >> direction;
-        //TODO: проверка корректности ввода
+        while (true){
+            int direction(0);
+            cout << "Куда идти?" << endl;
+            cout << "0 - вверх, 1 - вправо, 2 - вниз, 3 - влево," << endl;
+            cin >> direction;
+            if (direction<4) return direction;
+        }
     }
 
     void autoMove() override {
